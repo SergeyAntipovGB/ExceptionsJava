@@ -49,7 +49,7 @@ public class Task2 {
 
         for (int i = 0; i < array.length; i++){
             for (int j= 0; j < array[i].length; j++){
-                array[i][j] = Integer.toString(random.nextInt(10, 100));
+                array[i][j] = Integer.toString(random.nextInt(100 - 10) + 10);
             }
         }
         if (random.nextInt(3) == 0){

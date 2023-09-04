@@ -22,10 +22,13 @@ public class Program {
         int[] arr = new int[10];
         System.out.println("Укажите индекс элемента массива, в который хотите записать значение 1: ");
         try {
-            int index = new Scanner(System.in).nextInt();
+            int index = scanner.nextInt();
             arr[index] = 1;
         } catch (Exception e ){
             System.out.println("Указан индекс за пределами массива.");
+        } finally {
+            scanner.close();
+            System.out.println("Сканнер закрыт.");
         }
     }
 
