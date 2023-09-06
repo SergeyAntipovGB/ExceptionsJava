@@ -1,5 +1,6 @@
 package homeTask3;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Task {
@@ -8,27 +9,56 @@ public class Task {
     
     public static void main(String[] args) {
         
+        ArrayList<String> userDataArray = new ArrayList<>();
         try {
             String userDataString = inputUserDataString();
-            String[] userDataArray = {};
-            int count = 0;
-            for (String item : userDataString.split(" "))
-                userDataArray[count++] = item;
+            for (String item : userDataString.split(" ")) {
+                userDataArray.add(item);
+            }
         } catch (Exception e) {
-            // TODO: handle exception
+            // ловим возможную ошибку парсинга
+            e.printStackTrace();
         }
+
         int exceptionCode = userDataArrayLength(userDataArray);
+        /**
+         * Проверка соответствия количества введенных данных
+         */
         switch (exceptionCode) {
             case -1:
-                throw new NotEnoughDataException("Введено меньше данных, чем необходимо!", exceptionCode);
+                try {
+                    throw new NotEnoughDataException("Введено меньше данных, чем необходимо!", exceptionCode);
+                } catch (NotEnoughDataException e) {
+                    System.out.printf("%s Код ошибки: %d\n",
+                    e.getMessage(), e.getExceptionCode());
+                }
                 break;
             case 1:
-                throw new ExtraDataException("Введено больше данных, чем необходимо!", exceptionCode);
+                try {
+                    throw new ExtraDataException("Введено больше данных, чем необходимо!", exceptionCode);
+                } catch (ExtraDataException e) {
+                    System.out.printf("%s Код ошибки: %d\n",
+                    e.getMessage(), e.getExceptionCode());
+                }
                 break;
             default:
                 break;
         }
 
+        try {
+            DataMaster dataMaster = new DataMaster();
+            char sex = dataMaster.findSex(userDataArray);
+            String phone = dataMaster.findPhone(userDataArray);
+
+        } catch (NoDataSexException e) {
+            e.getMessage();
+        } catch (ExtraDataException e) {
+            e.getMessage();
+        } catch (BadPhoneDataException e) {
+            e.getMessage();
+        } catch (Exception e) {
+            // TODO: ловим ошибки данных
+        }
     }
 
     /** Метод запрашивает у пользователя данные
@@ -53,9 +83,9 @@ public class Task {
      * 1 если данных больше чем необходимо,
      * 0 если данных достаточно
      */
-    public static int userDataArrayLength(String[] array) {
-        if (array.length < 6) return -1;
-        if (array.length > 6) return 1;
-        return 0;
+    public static int userDataArrayLength(ArrayList<String> array) {
+        if (array.size() < 6) return -1;
+        else if (array.size() > 6) return 1;
+        else return 0;
     }
 }

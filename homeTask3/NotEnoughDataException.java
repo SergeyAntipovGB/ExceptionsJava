@@ -1,6 +1,6 @@
 package homeTask3;
 
-public class NotEnoughDataException extends Exception {
+public class NotEnoughDataException extends RuntimeException {
     private final int exceptionCode;
 
     public int getExceptionCode() {
