@@ -51,7 +51,13 @@ public class DataMaster {
         this.sex = 0;
     }
 
-    public char findSex(ArrayList<String> array) {
+    /** Метод проверяет наличие корректных данных про пол
+     * @param ArrayList<String> array
+     * @return char
+     * @throws NoDataSexException
+     * @throws ExtraDataException
+     */
+    public char findSex(ArrayList<String> array) throws NoDataSexException, ExtraDataException {
         if (array.indexOf("f") == -1) {
             if (array.indexOf("m") == -1) {
                 throw new NoDataSexException("Отсутствует запись с указанием пола или пол указан неверно!");
@@ -65,32 +71,74 @@ public class DataMaster {
         throw new ExtraDataException("Дублируются данные про пол!");
     }
 
-    public String findPhone(ArrayList<String> array) {
+    /** Метод проверяет наличие валидного номера телефона
+     * @param ArrayList<String> array
+     * @return String 
+     * @throws BadNumberException
+     * @throws ExtraDataException
+     */
+    public String findPhone(ArrayList<String> array) throws BadNumberException, ExtraDataException {
         ArrayList<String> correctData = new ArrayList<>();
         for (String item : array) {
             if (item.length() == 11) {
-                if (isDigit(item)) correctData.add(item);
+                if (isDigit(item.substring(0, 5)) &
+                    isDigit(item.substring(5))
+                ) correctData.add(item);
             }
         }
-        if (correctData.size() != 1) {
-            throw new BadPhoneDataException("Неверные телефонные данные! Номер телефона должен содержать 11 цифр без знаков!");
-        }else return correctData.get(0);
+        if (correctData.isEmpty()) throw new BadNumberException("Отсутствует номер телефона или введены неверные телефонные данные! Номер телефона должен содержать 11 цифр без знаков!");
+        else if (correctData.size() != 1) throw new ExtraDataException("Введено более одного номера телефона!");
+        else return correctData.get(0);
     }
 
     /** Метод проверяет является ли строка числом
      * @param s (String)
      * @return boolean (true если является числом, false если в строке есть не числовые символы)
-     * @throws NumberFormatException
      */
-    private static boolean isDigit(String s) /*throws NumberFormatException*/ {
+    private static boolean isDigit(String s) {
         try {
-            Integer.parseInt(s.substring(0, 5));
-            Integer.parseInt(s.substring(5));
+            Integer.parseInt(s);
             return true;
         } catch (NumberFormatException e) {
             return false;
         }
     }
 
-
+    /** Метод проверяет наличие правильной даты
+     * @param ArrayList<String> array
+     * @return String
+     * @throws BadNumberException
+     * @throws ExtraDataException
+     */
+    public String findBirthday(ArrayList<String> array) throws BadNumberException, ExtraDataException {
+        ArrayList<Integer> ddmmyyyy = new ArrayList<>(3);
+        ArrayList<String> correctData = new ArrayList<>();
+        for (String item : array) {
+            if (item.length() == 10) {
+                try {
+                    for (String s : item.split(".")) {
+                        ddmmyyyy.add(Integer.parseInt(s));
+                    }
+                    correctData.add(item);
+                } catch (NumberFormatException e) {
+                    // пропускаем невалидные для даты данные
+                }
+            }
+        }
+        if (correctData.isEmpty()) throw new BadNumberException("Отсутствует дата рожденья или неправильный формат даты! Дата должна быть в формате дд.мм.гггг");
+        else if (correctData.size() != 1) throw new ExtraDataException("Вы ввели несколько дат рождения!");
+        else {
+            for (String s : correctData.get(0).split(".")) {
+                ddmmyyyy.add(Integer.parseInt(s));
+            }
+            if (ddmmyyyy.get(0) > 0 &
+                ddmmyyyy.get(0) < 32 &
+                ddmmyyyy.get(1) > 0 &
+                ddmmyyyy.get(1) < 13 &
+                ddmmyyyy.get(2) > 1900 &
+                ddmmyyyy.get(2) < 2024
+            )return correctData.get(0);
+            else throw new BadNumberException("Неправильная дата!  01<дд<31, 01<мм<12, 1900<гггг<2024");
+        }
+    }
 }

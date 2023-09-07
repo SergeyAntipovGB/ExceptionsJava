@@ -55,7 +55,7 @@ public class Task {
             DataMaster dataMaster = new DataMaster();
             char sex = dataMaster.findSex(userDataArray);
             String phone = dataMaster.findPhone(userDataArray);
-            
+            String birthday = dataMaster.findBirthday(userDataArray);
 
             System.out.println("есть пол > " + sex);
             System.out.println("есть телефон > " + phone);
@@ -65,7 +65,7 @@ public class Task {
             e.printStackTrace();
         } catch (ExtraDataException e) {
             e.printStackTrace();
-        } catch (BadPhoneDataException e) {
+        } catch (BadNumberException e) {
             e.printStackTrace();
         } //catch (Exception e) {
             // TODO: ловим ошибки данных
