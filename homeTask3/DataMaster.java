@@ -1,10 +1,6 @@
 package homeTask3;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.lang.model.util.ElementScanner6;
 
 public class DataMaster {
     
@@ -60,11 +56,11 @@ public class DataMaster {
             if (array.indexOf("m") == -1) {
                 throw new NoDataSexException("Отсутствует запись с указанием пола или пол указан неверно!");
             }else {
-                if (array.indexOf("m") == array.lastIndexOf("m")) return 'm';
+                if (array.indexOf("m") == array.lastIndexOf("m")) return (char) 'm';
             }
         }else {
             if (array.indexOf("f") == array.lastIndexOf("f"))
-            return 'f';
+            return (char) 'f';
         }
         throw new ExtraDataException("Дублируются данные про пол!");
     }
@@ -81,17 +77,20 @@ public class DataMaster {
         }else return correctData.get(0);
     }
 
-    private static boolean isDigit(String s) throws NumberFormatException {
+    /** Метод проверяет является ли строка числом
+     * @param s (String)
+     * @return boolean (true если является числом, false если в строке есть не числовые символы)
+     * @throws NumberFormatException
+     */
+    private static boolean isDigit(String s) /*throws NumberFormatException*/ {
         try {
-            Integer.parseInt(s);
+            Integer.parseInt(s.substring(0, 5));
+            Integer.parseInt(s.substring(5));
             return true;
         } catch (NumberFormatException e) {
             return false;
         }
     }
 
-    // public Map<String, String> parseData(ArrayList<String> array) {
-    //     Map<String, String> datMap = new HashMap<>();
 
-    // }
 }

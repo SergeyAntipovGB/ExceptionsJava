@@ -45,20 +45,31 @@ public class Task {
                 break;
         }
 
+        /**
+         * Проверка корректности данных
+         */
         try {
+            System.out.println("*****************");
+            System.out.println(userDataArray);
+            System.out.println("*****************");
             DataMaster dataMaster = new DataMaster();
             char sex = dataMaster.findSex(userDataArray);
             String phone = dataMaster.findPhone(userDataArray);
+            
+
+            System.out.println("есть пол > " + sex);
+            System.out.println("есть телефон > " + phone);
+
 
         } catch (NoDataSexException e) {
-            e.getMessage();
+            e.printStackTrace();
         } catch (ExtraDataException e) {
-            e.getMessage();
+            e.printStackTrace();
         } catch (BadPhoneDataException e) {
-            e.getMessage();
-        } catch (Exception e) {
+            e.printStackTrace();
+        } //catch (Exception e) {
             // TODO: ловим ошибки данных
-        }
+        // }
     }
 
     /** Метод запрашивает у пользователя данные
