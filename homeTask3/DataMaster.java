@@ -111,34 +111,34 @@ public class DataMaster {
      * @throws ExtraDataException
      */
     public String findBirthday(ArrayList<String> array) throws BadNumberException, ExtraDataException {
-        ArrayList<Integer> ddmmyyyy = new ArrayList<>(3);
+        ArrayList<Integer> ddmmyyyy = new ArrayList<>();
         ArrayList<String> correctData = new ArrayList<>();
         for (String item : array) {
             if (item.length() == 10) {
                 try {
-                    for (String s : item.split(".")) {
-                        ddmmyyyy.add(Integer.parseInt(s));
-                    }
-                    correctData.add(item);
+                    ddmmyyyy.add(Integer.parseInt(item.substring(0, 2)));
+                    ddmmyyyy.add(Integer.parseInt(item.substring(3, 5)));
+                    ddmmyyyy.add(Integer.parseInt(item.substring(6)));
+                    if (ddmmyyyy.get(0) > 0 &
+                        ddmmyyyy.get(0) < 32 &
+                        ddmmyyyy.get(1) > 0 &
+                        ddmmyyyy.get(1) < 13 &
+                        ddmmyyyy.get(2) > 1900 &
+                        ddmmyyyy.get(2) < 2024
+                    )correctData.add(
+                        ddmmyyyy.get(0).toString() + "." +
+                        ddmmyyyy.get(1).toString() + "." +
+                        ddmmyyyy.get(2).toString()
+                    );
+                    else throw new NumberFormatException("");
                 } catch (NumberFormatException e) {
-                    // пропускаем невалидные для даты данные
+                    // проверяем невалидные для даты данные
+                    throw new BadNumberException("Неправильная дата! \n 01<дд<31, 01<мм<12, 1900<гггг<2024");
                 }
             }
         }
         if (correctData.isEmpty()) throw new BadNumberException("Отсутствует дата рожденья или неправильный формат даты! Дата должна быть в формате дд.мм.гггг");
         else if (correctData.size() != 1) throw new ExtraDataException("Вы ввели несколько дат рождения!");
-        else {
-            for (String s : correctData.get(0).split(".")) {
-                ddmmyyyy.add(Integer.parseInt(s));
-            }
-            if (ddmmyyyy.get(0) > 0 &
-                ddmmyyyy.get(0) < 32 &
-                ddmmyyyy.get(1) > 0 &
-                ddmmyyyy.get(1) < 13 &
-                ddmmyyyy.get(2) > 1900 &
-                ddmmyyyy.get(2) < 2024
-            )return correctData.get(0);
-            else throw new BadNumberException("Неправильная дата!  01<дд<31, 01<мм<12, 1900<гггг<2024");
-        }
+        else return correctData.get(0);
     }
 }

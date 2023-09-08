@@ -21,9 +21,8 @@ public class Task {
         }
 
         int exceptionCode = userDataArrayLength(userDataArray);
-        /**
-         * Проверка соответствия количества введенных данных
-         */
+
+        /** Проверка соответствия количества введенных данных */
         switch (exceptionCode) {
             case -1:
                 try {
@@ -45,20 +44,24 @@ public class Task {
                 break;
         }
 
-        /**
-         * Проверка корректности данных
-         */
+        /** Проверка корректности данных */
         try {
-            System.out.println("*****************");
+            T.print();
             System.out.println(userDataArray);
-            System.out.println("*****************");
+            T.print();
             DataMaster dataMaster = new DataMaster();
-            char sex = dataMaster.findSex(userDataArray);
-            String phone = dataMaster.findPhone(userDataArray);
-            String birthday = dataMaster.findBirthday(userDataArray);
 
-            System.out.println("есть пол > " + sex);
-            System.out.println("есть телефон > " + phone);
+            char sex = dataMaster.findSex(userDataArray);
+            T.print("есть пол > ");
+            T.print(sex);
+
+            String phone = dataMaster.findPhone(userDataArray);
+            T.print("есть телефон > ");
+            T.print(phone);
+
+            String birthday = dataMaster.findBirthday(userDataArray);
+            T.print("есть дата > ");
+            T.print(birthday);
 
 
         } catch (NoDataSexException e) {
