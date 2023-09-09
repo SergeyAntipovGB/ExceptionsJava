@@ -1,6 +1,5 @@
 package homeTask3;
 
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,8 +14,7 @@ public class Task {
         /** Ввод данных пользователем с клавиатуры */
         ArrayList<String> userDataArray = new ArrayList<>();
         try {
-            String userDataString = "фамилия m 17.12.1905 имя 80001234567 отчество";
-            // String userDataString = inputUserDataString();
+            String userDataString = inputUserDataString();
             for (String item : userDataString.split(" ")) {
                 userDataArray.add(item);
             }
@@ -58,7 +56,6 @@ public class Task {
             dataMaster.findPhone(userDataArray);
             dataMaster.findBirthday(userDataArray);
             dataMaster.findFIO(userDataArray);
-            T.print(dataMaster.toString());
         } catch (NoDataSexException e) {
             e.printStackTrace();
         } catch (ExtraDataException e) {
@@ -67,13 +64,15 @@ public class Task {
             e.printStackTrace();
         }
 
-        try(FileWriter writer = new FileWriter(dataMaster.getSurname() + ".txt", true)) {
+        /** Запись данных в файл */
+        String filePath = String.format("homeTask3/Data/%s.txt", dataMaster.getSurname());
+        try(FileWriter writer = new FileWriter(filePath, true)) {
             writer.write(dataMaster.toString());
             writer.append('\n');
             writer.flush();
         }
         catch(IOException e) {
-            System.out.println(e.getMessage());
+            throw new BadFileException("Не удалось создать файл " + filePath + " или записать в него данные!");
         }
     }
 
@@ -90,7 +89,7 @@ public class Task {
             "Номер телефона в формате целого числа без знаков\n" +
             "Пол - латинские буквы f или m\n" +
             "!!! ВАЖНО: фамилия должна быть введена раньше чем имя, " +
-            "а имя раньше, чем отчество!\n> "
+            "а имя раньше чем отчество!\n> "
         );
         return scanner.nextLine();
     }
