@@ -1,17 +1,22 @@
 package homeTask3;
 
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Task {
     
     private static Scanner scanner = new Scanner(System.in);
-    
+
     public static void main(String[] args) {
         
+        /** Ввод данных пользователем с клавиатуры */
         ArrayList<String> userDataArray = new ArrayList<>();
         try {
-            String userDataString = inputUserDataString();
+            String userDataString = "фамилия m 17.12.1905 имя 80001234567 отчество";
+            // String userDataString = inputUserDataString();
             for (String item : userDataString.split(" ")) {
                 userDataArray.add(item);
             }
@@ -20,6 +25,7 @@ public class Task {
             e.printStackTrace();
         }
 
+        /** Опреледение кода ошибки */
         int exceptionCode = userDataArrayLength(userDataArray);
 
         /** Проверка соответствия количества введенных данных */
@@ -44,35 +50,31 @@ public class Task {
                 break;
         }
 
+        DataMaster dataMaster = new DataMaster();
+
         /** Проверка корректности данных */
         try {
-            T.print();
-            System.out.println(userDataArray);
-            T.print();
-            DataMaster dataMaster = new DataMaster();
-
-            char sex = dataMaster.findSex(userDataArray);
-            T.print("есть пол > ");
-            T.print(sex);
-
-            String phone = dataMaster.findPhone(userDataArray);
-            T.print("есть телефон > ");
-            T.print(phone);
-
-            String birthday = dataMaster.findBirthday(userDataArray);
-            T.print("есть дата > ");
-            T.print(birthday);
-
-
+            dataMaster.findSex(userDataArray);
+            dataMaster.findPhone(userDataArray);
+            dataMaster.findBirthday(userDataArray);
+            dataMaster.findFIO(userDataArray);
+            T.print(dataMaster.toString());
         } catch (NoDataSexException e) {
             e.printStackTrace();
         } catch (ExtraDataException e) {
             e.printStackTrace();
-        } catch (BadNumberException e) {
+        } catch (BadDataException e) {
             e.printStackTrace();
-        } //catch (Exception e) {
-            // TODO: ловим ошибки данных
-        // }
+        }
+
+        try(FileWriter writer = new FileWriter(dataMaster.getSurname() + ".txt", true)) {
+            writer.write(dataMaster.toString());
+            writer.append('\n');
+            writer.flush();
+        }
+        catch(IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     /** Метод запрашивает у пользователя данные
@@ -86,7 +88,9 @@ public class Task {
             "Фамилию Имя Отчество Дату_рождения Номер_телефона Пол\n" +
             "Дату рождения в формате dd.mm.yyyy\n" +
             "Номер телефона в формате целого числа без знаков\n" +
-            "Пол - латинские буквы f или m\n> "
+            "Пол - латинские буквы f или m\n" +
+            "!!! ВАЖНО: фамилия должна быть введена раньше чем имя, " +
+            "а имя раньше, чем отчество!\n> "
         );
         return scanner.nextLine();
     }
